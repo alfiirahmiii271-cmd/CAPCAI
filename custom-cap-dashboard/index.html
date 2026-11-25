@@ -1,0 +1,792 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#05080d">
+  <meta name="cap-site-key" content="69083029a7">
+  <meta name="cap-widget-base-url" content="http://localhost:3000">
+  <title>CapShield AI — Security Analytics</title>
+  <link rel="stylesheet" href="/dashboard/style.css">
+  <script src="/dashboard/public/assets/chart.js@4.5.0.min.js" defer></script>
+  <script src="/dashboard/dashboard.js" defer></script>
+</head>
+<body>
+  <svg class="icon-sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10z"/></symbol>
+    <symbol id="i-activity" viewBox="0 0 24 24"><path d="M3 12h4l3 8 4-16 3 8h4"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"/><path d="m10.7 12.3 8.8-8.8M16 7l3 3M13 10l2 2"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></symbol>
+    <symbol id="i-network" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="5" rx="1.5"/><rect x="2" y="17" width="6" height="5" rx="1.5"/><rect x="16" y="17" width="6" height="5" rx="1.5"/><path d="M12 7v5M5 17v-2a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v2"/></symbol>
+    <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+    <symbol id="i-smartphone" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></symbol>
+    <symbol id="i-tablet" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="3"/><path d="M11 18h2"/></symbol>
+    <symbol id="i-apple" viewBox="0 0 24 24"><path d="M16.5 12.5c0-2.4 2-3.6 2.1-3.7-1.2-1.7-3-1.9-3.6-1.9-1.6-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.9-1.7 0-3.3 1-4.2 2.5-1.8 3.1-.5 7.8 1.3 10.3.9 1.2 1.9 2.6 3.2 2.5 1.3 0 1.8-.8 3.4-.8s2 .8 3.4.8c1.4 0 2.3-1.2 3.1-2.5.9-1.4 1.3-2.8 1.3-2.9-.1 0-2.9-1.1-2.9-4.3z"/><path d="M14.2 4.7c.7-.9 1.2-2.1 1.1-3.3-1 .1-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.2 1.2.1 2.3-.6 3-1.5z"/></symbol>
+    <symbol id="i-linux" viewBox="0 0 24 24"><path d="M8 21h8M9 17c-2 1.2-3 3.3-3 4M15 17c2 1.2 3 3.3 3 4M8.5 12c0-3 1.5-6 3.5-6s3.5 3 3.5 6c0 2.5-1.5 5-3.5 5s-3.5-2.5-3.5-5z"/><path d="M10 10h.01M14 10h.01"/></symbol>
+    <symbol id="i-windows" viewBox="0 0 24 24"><path d="M3 4.5 10.5 3v8H3V4.5zM12 2.8 21 1v10h-9V2.8zM3 13h7.5v8L3 19.5V13zM12 13h9v10l-9-1.8V13z"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7h-5V2"/><path d="M20 7a9 9 0 1 0 1 7"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.3 2.3 4.7-5"/></symbol>
+    <symbol id="i-x-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/></symbol>
+    <symbol id="i-alert-triangle" viewBox="0 0 24 24"><path d="M10.3 3.8 2.2 18a2 2 0 0 0 1.7 3h16.2a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="i-ban" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6M12 2v3"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.6v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1z"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 4.5 13H11l-1 9L19.5 11H13l1-9z"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m7 4 13 8-13 8V4z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6M10 11v6M14 11v6"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 3h7v7M10 14 21 3M21 14v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h6"/></symbol>
+    <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+    <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14M18 13l-6 6-6-6"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/></symbol>
+    <symbol id="i-bot" viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="3"/><path d="M12 3v4M8 12h.01M16 12h.01M9 16h6M2 12h2M20 12h2"/></symbol>
+    <symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01"/></symbol>
+    <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="m12 3 1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3zM19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15zM5 3l.6 1.4L7 5l-1.4.6L5 7l-.6-1.4L3 5l1.4-.6L5 3z"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol>
+    <symbol id="i-trend-up" viewBox="0 0 24 24"><path d="M3 17 9 11l4 4 8-8M15 7h6v6"/></symbol>
+    <symbol id="i-trend-down" viewBox="0 0 24 24"><path d="m3 7 6 6 4-4 8 8M15 17h6v-6"/></symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  </svg>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navigasi dashboard">
+      <div class="brand">
+        <div class="brand-mark">
+          <svg class="icon" aria-hidden="true"><use href="#i-shield-check"></use></svg>
+        </div>
+        <div class="brand-copy">
+          <strong class="brand-name">CapShield <span>AI</span></strong>
+          <span class="brand-sub">Security Analytics</span>
+        </div>
+        <span class="brand-version">v2</span>
+      </div>
+
+      <section class="sidebar-section" aria-labelledby="keysHeading">
+        <div class="sidebar-heading">
+          <span id="keysHeading">Site Keys</span>
+          <button class="mini-btn" id="addKeyBtn" type="button" aria-label="Tambah site key">
+            <svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg>
+          </button>
+        </div>
+        <label class="key-search" for="keySearch">
+          <svg class="icon" aria-hidden="true"><use href="#i-search"></use></svg>
+          <input id="keySearch" type="search" placeholder="Cari site key..." autocomplete="off">
+        </label>
+        <ul class="key-list" id="keyList" aria-live="polite"></ul>
+        <div class="key-hint">
+          <span class="key-hint-dot"></span>
+          <span>Key aktif menerima trafik real-time</span>
+        </div>
+      </section>
+
+      <nav class="sidebar-nav" aria-label="Menu utama">
+        <div class="sidebar-heading"><span>Menu Utama</span></div>
+        <button class="nav-link is-active" type="button" data-view="activity">
+          <svg class="icon" aria-hidden="true"><use href="#i-activity"></use></svg>
+          <span>Analitik</span>
+          <span class="nav-badge">Live</span>
+        </button>
+        <button class="nav-link" type="button" data-scroll="trafficPanel">
+          <svg class="icon" aria-hidden="true"><use href="#i-zap"></use></svg>
+          <span>Lalu Lintas</span>
+        </button>
+        <button class="nav-link" type="button" data-scroll="auditPanel">
+          <svg class="icon" aria-hidden="true"><use href="#i-lock"></use></svg>
+          <span>Audit Keamanan</span>
+        </button>
+        <button class="nav-link" type="button" data-view="integration">
+          <svg class="icon" aria-hidden="true"><use href="#i-code"></use></svg>
+          <span>Integrasi Script</span>
+        </button>
+        <button class="nav-link" type="button" data-view="rules">
+          <svg class="icon" aria-hidden="true"><use href="#i-settings"></use></svg>
+          <span>Konfigurasi Rules</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="system-card">
+          <div class="system-row">
+            <span>Cap Server</span>
+            <span class="system-state">
+              <span class="status-dot" id="systemDot"></span>
+              <span id="systemApiStatus">Menghubungkan...</span>
+            </span>
+          </div>
+          <div class="system-row">
+            <span>Runtime</span>
+            <span class="mono">Node.js / Express</span>
+          </div>
+          <div class="system-row">
+            <span>Dashboard</span>
+            <span class="mono">v2.0.0</span>
+          </div>
+        </div>
+        <a class="sidebar-docs" href="/" target="_blank" rel="noreferrer">
+          <svg class="icon" aria-hidden="true"><use href="#i-external"></use></svg>
+          Buka halaman CAPTCHA
+        </a>
+      </div>
+    </aside>
+
+    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+
+    <div class="main-shell">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-btn" id="menuBtn" type="button" aria-label="Buka menu navigasi" aria-expanded="false" aria-controls="sidebar">
+            <svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg>
+          </button>
+          <div class="tabs" role="tablist" aria-label="Bagian dashboard">
+            <button class="tab is-active" id="tab-activity" type="button" role="tab" aria-selected="true" aria-controls="view-activity" data-view="activity">
+              <svg class="icon" aria-hidden="true"><use href="#i-activity"></use></svg>
+              <span>Aktivitas</span>
+            </button>
+            <button class="tab" id="tab-integration" type="button" role="tab" aria-selected="false" aria-controls="view-integration" data-view="integration">
+              <svg class="icon" aria-hidden="true"><use href="#i-code"></use></svg>
+              <span>Integrasi</span>
+            </button>
+            <button class="tab" id="tab-rules" type="button" role="tab" aria-selected="false" aria-controls="view-rules" data-view="rules">
+              <svg class="icon" aria-hidden="true"><use href="#i-settings"></use></svg>
+              <span>Rules</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <div class="active-key-chip" title="Site key aktif">
+            <span>Active key</span>
+            <code id="activeKeyCode">69083029a7</code>
+          </div>
+          <div class="date-chip">
+            <svg class="icon" aria-hidden="true"><use href="#i-calendar"></use></svg>
+            <span id="todayLabel">Hari ini</span>
+          </div>
+          <button class="btn btn-primary" id="copySiteKeyBtn" type="button">
+            <svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg>
+            <span>Salin Site Key</span>
+          </button>
+          <button class="icon-btn" id="refreshBtn" type="button" aria-label="Perbarui data" title="Perbarui data">
+            <svg class="icon" aria-hidden="true"><use href="#i-refresh"></use></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="content" id="mainContent">
+        <section class="view is-active" id="view-activity" role="tabpanel" aria-labelledby="tab-activity">
+          <div class="page-intro">
+            <div>
+              <p class="eyebrow">Security overview</p>
+              <h1>Analitik Keamanan</h1>
+              <p>Pantau performa verifikasi CAPTCHA, kualitas trafik, dan ancaman otomatis dalam satu tampilan.</p>
+            </div>
+            <div class="live-pill">
+              <span class="live-dot"></span>
+              <span>Live</span>
+              <span class="live-sep"></span>
+              <span class="mono" id="liveClock">--:--:--</span>
+            </div>
+          </div>
+
+          <div class="metric-grid">
+            <article class="metric-card tone-cyan">
+              <div class="metric-top">
+                <span class="metric-icon"><svg class="icon" aria-hidden="true"><use href="#i-activity"></use></svg></span>
+                <span class="metric-label">Tantangan</span>
+              </div>
+              <p class="metric-value" id="mChallenges">1,420</p>
+              <p class="metric-foot" id="mChallengesFoot">Rentang 07:00–14:00</p>
+            </article>
+
+            <article class="metric-card tone-green">
+              <div class="metric-top">
+                <span class="metric-icon"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"></use></svg></span>
+                <span class="metric-label">Terverifikasi</span>
+              </div>
+              <p class="metric-value" id="mVerified">1,380</p>
+              <p class="metric-foot" id="mVerifiedFoot">97.2% tingkat sukses</p>
+            </article>
+
+            <article class="metric-card tone-red">
+              <div class="metric-top">
+                <span class="metric-icon"><svg class="icon" aria-hidden="true"><use href="#i-x-circle"></use></svg></span>
+                <span class="metric-label">Gagal / Bot</span>
+              </div>
+              <p class="metric-value" id="mFailed">40</p>
+              <p class="metric-foot" id="mFailedFoot">2.8% dari total tantangan</p>
+            </article>
+
+            <article class="metric-card tone-purple">
+              <div class="metric-top">
+                <span class="metric-icon"><svg class="icon" aria-hidden="true"><use href="#i-timer"></use></svg></span>
+                <span class="metric-label">Avg. Durasi</span>
+              </div>
+              <p class="metric-value" id="mDuration">0.8s</p>
+              <p class="metric-foot" id="mDurationFoot">Rata-rata penyelesaian</p>
+            </article>
+
+            <article class="metric-card tone-amber">
+              <div class="metric-top">
+                <span class="metric-icon"><svg class="icon" aria-hidden="true"><use href="#i-ban"></use></svg></span>
+                <span class="metric-label">Bot Blocked</span>
+              </div>
+              <p class="metric-value" id="mBotBlocked">15</p>
+              <p class="metric-foot" id="mBotBlockedFoot">Otomatis diblokir</p>
+            </article>
+
+            <article class="metric-card tone-green" id="riskCard">
+              <div class="metric-top">
+                <span class="metric-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg></span>
+                <span class="metric-label">Tingkat Risiko</span>
+              </div>
+              <p class="metric-value" id="mRisk">Rendah</p>
+              <p class="metric-foot" id="mRiskFoot">Skor risiko 13 / 100</p>
+            </article>
+          </div>
+
+          <section class="panel chart-panel" id="trafficPanel" aria-labelledby="trafficTitle">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title" id="trafficTitle">
+                  <svg class="icon" aria-hidden="true"><use href="#i-zap"></use></svg>
+                  Analisis Lalu Lintas
+                </h2>
+                <p class="panel-sub">Perbandingan tantangan, verifikasi sukses, dan kegagalan per jam (07:00–14:00).</p>
+              </div>
+              <div class="chart-header-tools">
+                <div class="chart-legend" id="trafficLegend" aria-label="Filter dataset grafik">
+                  <button class="legend-btn legend-cyan is-active" type="button" data-dataset="0" aria-pressed="true">
+                    <span class="legend-dot"></span>Tantangan
+                  </button>
+                  <button class="legend-btn legend-green is-active" type="button" data-dataset="1" aria-pressed="true">
+                    <span class="legend-dot"></span>Terverifikasi
+                  </button>
+                  <button class="legend-btn legend-red is-active" type="button" data-dataset="2" aria-pressed="true">
+                    <span class="legend-dot"></span>Gagal
+                  </button>
+                </div>
+                <span class="panel-badge">Diperbarui <span id="lastUpdated">—</span></span>
+              </div>
+            </div>
+            <div class="chart-body">
+              <div class="chart-wrap">
+                <canvas id="trafficChart" aria-label="Grafik lalu lintas verifikasi" role="img"></canvas>
+              </div>
+            </div>
+          </section>
+
+          <div class="insight-grid">
+            <section class="panel" aria-labelledby="countriesTitle">
+              <div class="panel-header compact">
+                <div>
+                  <h2 class="panel-title" id="countriesTitle">
+                    <svg class="icon" aria-hidden="true"><use href="#i-globe"></use></svg>
+                    Sebaran Negara
+                  </h2>
+                  <p class="panel-sub">Asal trafik verifikasi teratas.</p>
+                </div>
+                <span class="panel-badge">Top 5</span>
+              </div>
+              <div class="data-list" id="countryList"></div>
+            </section>
+
+            <section class="panel" aria-labelledby="networksTitle">
+              <div class="panel-header compact">
+                <div>
+                  <h2 class="panel-title" id="networksTitle">
+                    <svg class="icon" aria-hidden="true"><use href="#i-network"></use></svg>
+                    Top Network / ISP
+                  </h2>
+                  <p class="panel-sub">Penyedia jaringan dengan volume tertinggi.</p>
+                </div>
+                <span class="panel-badge">ASN</span>
+              </div>
+              <div class="data-list" id="networkList"></div>
+            </section>
+
+            <section class="panel" aria-labelledby="deviceTitle">
+              <div class="panel-header compact">
+                <div>
+                  <h2 class="panel-title" id="deviceTitle">
+                    <svg class="icon" aria-hidden="true"><use href="#i-smartphone"></use></svg>
+                    Distribusi Perangkat
+                  </h2>
+                  <p class="panel-sub">Komposisi jenis perangkat pengguna.</p>
+                </div>
+                <span class="panel-badge">Donut</span>
+              </div>
+              <div class="donut-body">
+                <div class="donut-wrap">
+                  <canvas id="deviceDonut" aria-label="Donut chart distribusi perangkat" role="img"></canvas>
+                  <div class="donut-center">
+                    <strong id="deviceTotal">1,420</strong>
+                    <span>Total sesi</span>
+                  </div>
+                </div>
+                <div class="device-legend" id="deviceLegend"></div>
+              </div>
+            </section>
+
+            <section class="panel" aria-labelledby="osTitle">
+              <div class="panel-header compact">
+                <div>
+                  <h2 class="panel-title" id="osTitle">
+                    <svg class="icon" aria-hidden="true"><use href="#i-monitor"></use></svg>
+                    Sistem Operasi
+                  </h2>
+                  <p class="panel-sub">Sistem operasi yang paling sering digunakan.</p>
+                </div>
+                <span class="panel-badge">OS</span>
+              </div>
+              <div class="data-list os-list" id="osList"></div>
+            </section>
+          </div>
+
+          <section class="panel audit-panel" id="auditPanel" aria-labelledby="auditTitle">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title" id="auditTitle">
+                  <svg class="icon" aria-hidden="true"><use href="#i-lock"></use></svg>
+                  Live Security Audit Logs
+                  <span class="inline-live"><span class="live-dot small"></span>Live</span>
+                </h2>
+                <p class="panel-sub">Riwayat verifikasi real-time lengkap dengan status, perangkat, dan skor risiko.</p>
+              </div>
+              <div class="audit-tools">
+                <label class="select-wrap" for="logFilter">
+                  <svg class="icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg>
+                  <select id="logFilter">
+                    <option value="all">Semua status</option>
+                    <option value="verified">Terverifikasi</option>
+                    <option value="failed">Gagal</option>
+                    <option value="blocked">Diblokir</option>
+                    <option value="warning">Waspada</option>
+                  </select>
+                </label>
+                <button class="btn btn-ghost" id="pauseLogsBtn" type="button" aria-pressed="false">
+                  <svg class="icon" aria-hidden="true"><use href="#i-pause"></use></svg>
+                  <span id="pauseLogsLabel">Pause</span>
+                </button>
+                <button class="icon-btn" id="exportLogsBtn" type="button" aria-label="Ekspor log CSV" title="Ekspor log CSV">
+                  <svg class="icon" aria-hidden="true"><use href="#i-download"></use></svg>
+                </button>
+                <button class="icon-btn danger" id="clearLogsBtn" type="button" aria-label="Hapus semua log" title="Hapus semua log">
+                  <svg class="icon" aria-hidden="true"><use href="#i-trash"></use></svg>
+                </button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="audit-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Waktu</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Aktivitas</th>
+                    <th scope="col">Site Key</th>
+                    <th scope="col">Lokasi / IP</th>
+                    <th scope="col">Perangkat</th>
+                    <th scope="col">Durasi</th>
+                    <th scope="col">Risk</th>
+                  </tr>
+                </thead>
+                <tbody id="auditLogBody">
+                  <tr><td colspan="8" class="table-empty">Memuat log keamanan...</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="table-footer">
+              <span id="auditCount">0 entri</span>
+              <span class="table-footer-note">Streaming otomatis setiap beberapa detik</span>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" id="view-integration" role="tabpanel" aria-labelledby="tab-integration" hidden>
+          <div class="page-intro">
+            <div>
+              <p class="eyebrow">Developer setup</p>
+              <h1>Integrasi Script</h1>
+              <p>Pasang widget CapShield AI pada form HTML Anda dan verifikasi token di server.</p>
+            </div>
+            <div class="active-key-chip large">
+              <span>Site key aktif</span>
+              <code id="integrationSiteKey">69083029a7</code>
+            </div>
+          </div>
+
+          <section class="panel flow-panel" aria-labelledby="flowTitle">
+            <div class="panel-header compact">
+              <div>
+                <h2 class="panel-title" id="flowTitle">
+                  <svg class="icon" aria-hidden="true"><use href="#i-activity"></use></svg>
+                  Diagram Alur Verifikasi
+                </h2>
+                <p class="panel-sub">Perjalanan token dari interaksi klien hingga tercatat di dashboard.</p>
+              </div>
+              <span class="panel-badge">Flow</span>
+            </div>
+            <div class="flow-diagram" role="list" aria-label="Alur verifikasi CAPTCHA">
+              <div class="flow-node" role="listitem">
+                <span class="flow-icon"><svg class="icon" aria-hidden="true"><use href="#i-monitor"></use></svg></span>
+                <span class="flow-copy">
+                  <strong>Klien</strong>
+                  <small>Browser / aplikasi pengguna</small>
+                </span>
+              </div>
+              <span class="flow-connector" aria-hidden="true">
+                <svg class="icon"><use href="#i-arrow-right"></use></svg>
+              </span>
+              <div class="flow-node" role="listitem">
+                <span class="flow-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield-check"></use></svg></span>
+                <span class="flow-copy">
+                  <strong>Cap Widget</strong>
+                  <small>Menyelesaikan tantangan</small>
+                </span>
+              </div>
+              <span class="flow-connector" aria-hidden="true">
+                <svg class="icon"><use href="#i-arrow-right"></use></svg>
+              </span>
+              <div class="flow-node" role="listitem">
+                <span class="flow-icon"><svg class="icon" aria-hidden="true"><use href="#i-server"></use></svg></span>
+                <span class="flow-copy">
+                  <strong>Verifikasi Server</strong>
+                  <small>Validasi token &amp; skor risiko</small>
+                </span>
+              </div>
+              <span class="flow-connector" aria-hidden="true">
+                <svg class="icon"><use href="#i-arrow-right"></use></svg>
+              </span>
+              <div class="flow-node" role="listitem">
+                <span class="flow-icon"><svg class="icon" aria-hidden="true"><use href="#i-activity"></use></svg></span>
+                <span class="flow-copy">
+                  <strong>Dashboard</strong>
+                  <small>Statistik &amp; audit log real-time</small>
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <div class="steps-grid">
+            <article class="step-card">
+              <span class="step-number">01</span>
+              <h2>Muat script widget</h2>
+              <p>Tambahkan script Cap Widget sebelum tag penutup body.</p>
+            </article>
+            <article class="step-card">
+              <span class="step-number">02</span>
+              <h2>Tempel komponen</h2>
+              <p>Letakkan elemen CAPTCHA di dalam form yang akan dilindungi.</p>
+            </article>
+            <article class="step-card">
+              <span class="step-number">03</span>
+              <h2>Verifikasi di server</h2>
+              <p>Kirim token ke endpoint <code>/verify</code> milik aplikasi Anda.</p>
+            </article>
+          </div>
+
+          <div class="integration-grid">
+            <section class="code-panel">
+              <div class="code-header">
+                <span class="code-title">
+                  <svg class="icon" aria-hidden="true"><use href="#i-code"></use></svg>
+                  HTML form + widget
+                </span>
+                <button class="mini-btn text" type="button" data-copy-target="widgetSnippet">
+                  <svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg>
+                  Salin
+                </button>
+              </div>
+              <pre><code id="widgetSnippet"></code></pre>
+            </section>
+
+            <section class="code-panel">
+              <div class="code-header">
+                <span class="code-title">
+                  <svg class="icon" aria-hidden="true"><use href="#i-server"></use></svg>
+                  Endpoint verifikasi aplikasi
+                </span>
+                <button class="mini-btn text" type="button" data-copy-target="verifySnippet">
+                  <svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg>
+                  Salin
+                </button>
+              </div>
+              <pre><code id="verifySnippet"></code></pre>
+            </section>
+          </div>
+
+          <section class="panel endpoint-panel">
+            <div class="panel-header compact">
+              <div>
+                <h2 class="panel-title">
+                  <svg class="icon" aria-hidden="true"><use href="#i-globe"></use></svg>
+                  Endpoint aktif
+                </h2>
+                <p class="panel-sub">Widget akan memanggil endpoint ini secara otomatis.</p>
+              </div>
+            </div>
+            <div class="endpoint-body">
+              <div class="endpoint-row">
+                <span>Widget endpoint</span>
+                <code id="integrationEndpoint">http://localhost:3000/69083029a7/</code>
+              </div>
+              <div class="endpoint-row">
+                <span>Form action</span>
+                <code id="integrationAction">/verify</code>
+              </div>
+              <div class="endpoint-row">
+                <span>Metode</span>
+                <code>POST application/x-www-form-urlencoded</code>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" id="view-rules" role="tabpanel" aria-labelledby="tab-rules" hidden>
+          <div class="page-intro">
+            <div>
+              <p class="eyebrow">Policy engine</p>
+              <h1>Konfigurasi Rules</h1>
+              <p>Atur tingkat kesulitan, rate limit, dan proteksi bot untuk site key yang sedang aktif.</p>
+            </div>
+            <div class="active-key-chip large">
+              <span>Berlaku untuk</span>
+              <code id="rulesSiteKey">69083029a7</code>
+            </div>
+          </div>
+
+          <div class="rules-layout">
+            <form class="panel rules-form" id="rulesForm">
+              <div class="panel-header compact">
+                <div>
+                  <h2 class="panel-title">
+                    <svg class="icon" aria-hidden="true"><use href="#i-settings"></use></svg>
+                    Kebijakan Verifikasi
+                  </h2>
+                  <p class="panel-sub">Perubahan disimpan pada browser ini untuk konfigurasi demo.</p>
+                </div>
+                <span class="panel-badge">Rules</span>
+              </div>
+
+              <div class="form-section">
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="rulesDifficulty">Tingkat kesulitan</label>
+                    <select id="rulesDifficulty">
+                      <option value="ringan">Ringan — akses cepat</option>
+                      <option value="sedang" selected>Sedang — direkomendasikan</option>
+                      <option value="ketat">Ketat — proteksi maksimal</option>
+                    </select>
+                    <span class="hint">Mempengaruhi jumlah dan kompleksitas tantangan.</span>
+                  </div>
+
+                  <div class="field">
+                    <label for="rulesRetention">Retensi log</label>
+                    <select id="rulesRetention">
+                      <option value="7">7 hari</option>
+                      <option value="30" selected>30 hari</option>
+                      <option value="90">90 hari</option>
+                      <option value="365">1 tahun</option>
+                    </select>
+                    <span class="hint">Lama penyimpanan audit log keamanan.</span>
+                  </div>
+
+                  <div class="field">
+                    <label for="rulesRateMax">Rate limit maksimal</label>
+                    <input id="rulesRateMax" type="number" min="1" max="10000" value="60" inputmode="numeric">
+                    <span class="hint">Jumlah request per jendela waktu.</span>
+                  </div>
+
+                  <div class="field">
+                    <label for="rulesRateWindow">Jendela waktu (detik)</label>
+                    <input id="rulesRateWindow" type="number" min="10" max="3600" value="60" inputmode="numeric">
+                    <span class="hint">Periode reset penghitung rate limit.</span>
+                  </div>
+                </div>
+
+                <div class="switch-list">
+                  <div class="switch-row">
+                    <div>
+                      <strong>Proteksi bot otomatis</strong>
+                      <p>Blokir pola replay, headless browser, dan interaksi tidak wajar.</p>
+                    </div>
+                    <label class="switch">
+                      <input id="rulesBotProtection" type="checkbox" checked>
+                      <span class="switch-track"></span>
+                      <span class="sr-only">Proteksi bot otomatis</span>
+                    </label>
+                  </div>
+
+                  <div class="switch-row">
+                    <div>
+                      <strong>Blokir datacenter / VPN</strong>
+                      <p>Tolak trafik yang berasal dari jaringan pusat data dan VPN publik.</p>
+                    </div>
+                    <label class="switch">
+                      <input id="rulesBlockDatacenter" type="checkbox" checked>
+                      <span class="switch-track"></span>
+                      <span class="sr-only">Blokir datacenter dan VPN</span>
+                    </label>
+                  </div>
+
+                  <div class="switch-row">
+                    <div>
+                      <strong>Geo-blocking</strong>
+                      <p>Batasi akses berdasarkan kode negara tertentu.</p>
+                    </div>
+                    <label class="switch">
+                      <input id="rulesGeoBlock" type="checkbox">
+                      <span class="switch-track"></span>
+                      <span class="sr-only">Aktifkan geo-blocking</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="rulesGeoList">Daftar negara yang diblokir</label>
+                  <input id="rulesGeoList" type="text" value="CN, RU" placeholder="Contoh: CN, RU, KP">
+                  <span class="hint">Gunakan kode ISO dua huruf, dipisahkan koma.</span>
+                </div>
+
+                <div class="field">
+                  <label for="rulesWebhook">Webhook keamanan</label>
+                  <input id="rulesWebhook" type="url" placeholder="https://example.com/hooks/capshield">
+                  <span class="hint">Opsional. Menerima notifikasi saat terjadi blokir.</span>
+                </div>
+
+                <div class="form-actions">
+                  <button class="btn btn-ghost" id="resetRulesBtn" type="button">Reset</button>
+                  <button class="btn btn-primary" type="submit">
+                    <svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>
+                    Simpan Rules
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <aside class="panel rules-summary" aria-labelledby="summaryTitle">
+              <div class="panel-header compact">
+                <div>
+                  <h2 class="panel-title" id="summaryTitle">
+                    <svg class="icon" aria-hidden="true"><use href="#i-shield-check"></use></svg>
+                    Ringkasan Kebijakan
+                  </h2>
+                  <p class="panel-sub">Pratinjau aturan yang sedang dipilih.</p>
+                </div>
+              </div>
+              <div class="summary-list">
+                <div class="summary-row">
+                  <span>Kesulitan</span>
+                  <strong id="summaryDifficulty">Sedang</strong>
+                </div>
+                <div class="summary-row">
+                  <span>Rate limit</span>
+                  <strong id="summaryRate">60 / 60 dtk</strong>
+                </div>
+                <div class="summary-row">
+                  <span>Proteksi bot</span>
+                  <strong id="summaryBot">Aktif</strong>
+                </div>
+                <div class="summary-row">
+                  <span>Datacenter / VPN</span>
+                  <strong id="summaryDatacenter">Diblokir</strong>
+                </div>
+                <div class="summary-row">
+                  <span>Geo-blocking</span>
+                  <strong id="summaryGeo">Nonaktif</strong>
+                </div>
+                <div class="summary-row">
+                  <span>Retensi log</span>
+                  <strong id="summaryRetention">30 hari</strong>
+                </div>
+              </div>
+              <div class="rules-note">
+                <svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>
+                <p>Konfigurasi ini tersimpan lokal di dashboard demo. Terapkan aturan final melalui Cap Server untuk produksi.</p>
+              </div>
+              <div class="saved-at">Terakhir disimpan: <span id="rulesSavedAt">belum disimpan</span></div>
+            </aside>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <dialog class="dialog" id="newKeyDialog" aria-labelledby="newKeyTitle">
+    <form id="newKeyForm" method="dialog">
+      <div class="dialog-header">
+        <div>
+          <h2 id="newKeyTitle">Tambah Site Key</h2>
+          <p>Buat key demo baru untuk memantau trafik terpisah.</p>
+        </div>
+        <button class="icon-btn" id="closeNewKeyBtn" type="button" aria-label="Tutup dialog">
+          <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+        </button>
+      </div>
+      <div class="dialog-body">
+        <div class="field">
+          <label for="newKeyName">Nama project / domain</label>
+          <input id="newKeyName" type="text" placeholder="Contoh: MyApp Production" maxlength="48" required>
+          <span class="hint">Key akan dibuat otomatis oleh dashboard demo.</span>
+        </div>
+      </div>
+      <div class="dialog-actions">
+        <button class="btn btn-ghost" id="cancelNewKeyBtn" type="button">Batal</button>
+        <button class="btn btn-primary" type="submit">
+          <svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg>
+          Buat Key
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <section class="captcha-assistant" id="captchaAssistantPanel" aria-label="CAPTCHA Assistant">
+    <header class="captcha-assistant-header">
+      <div class="captcha-assistant-avatar" aria-hidden="true">🤖</div>
+      <div class="captcha-assistant-heading">
+        <strong>CAPTCHA Assistant</strong>
+        <span>Asisten aktivitas CAPTCHA</span>
+      </div>
+      <button type="button" class="captcha-assistant-close" id="captchaAssistantToggle" aria-label="Minimalkan chatbot">−</button>
+    </header>
+
+    <div class="captcha-assistant-content" id="captchaAssistantContent">
+      <div class="captcha-assistant-messages" id="captchaAssistantMessages" aria-live="polite">
+        <div class="captcha-assistant-message bot">
+          Halo! Saya CAPTCHA Assistant. Saya bisa membantu menjelaskan CAPTCHA, aktivitas verifikasi, dan penyebab error. Saya tidak menyediakan kode program atau skrip.
+        </div>
+      </div>
+
+      <div class="captcha-assistant-quick">
+        <button type="button" data-question="Apa itu CAPTCHA?">Apa itu CAPTCHA?</button>
+        <button type="button" data-question="Apa penyebab error 403?">Error 403</button>
+        <button type="button" data-question="Apa penyebab error 500?">Error 500</button>
+        <button type="button" data-question="Bagaimana memahami statistik verifikasi?">Statistik verifikasi</button>
+      </div>
+
+      <form class="captcha-assistant-form" id="captchaAssistantForm">
+        <label class="sr-only" for="captchaAssistantInput">Pertanyaan tentang CAPTCHA</label>
+        <input id="captchaAssistantInput" type="text" maxlength="500" placeholder="Tulis pertanyaan tentang CAPTCHA..." autocomplete="off" required>
+        <button type="submit" aria-label="Kirim pertanyaan">Kirim</button>
+      </form>
+      <p class="captcha-assistant-note">Khusus pertanyaan CAPTCHA. Tidak menyediakan kode program.</p>
+    </div>
+  </section>
+  <div class="toast-host" id="toastHost" aria-live="polite" aria-atomic="true"></div>
+  <script src="/dashboard/chatbot.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,221 @@
+﻿ <!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/logo-small.webp" />
+    <title>Cap Dashboard - CAPTCHA Assistant</title>
+    <link rel="stylesheet" href="./public/assets/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="appSidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+          <path d="M4 8h16M4 16h16" />
+        </svg>
+      </button>
+
+      <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" hidden></div>
+
+      <aside class="sidebar" id="appSidebar">
+        <div class="sidebar-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+          <input type="text" id="searchInput" placeholder="Search keys..." />
+        </div>
+
+        <div class="keys-list" id="keysList"></div>
+
+        <div class="sidebar-footer">
+          <button class="new-key-btn" id="createKeyBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            New key
+          </button>
+
+          <button class="settings-btn" id="settingsBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37 1 .608 2.296.07 2.572-1.065" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            Settings
+          </button>
+        </div>
+      </aside>
+
+      <div class="content-area" id="detailPanel">
+        <div class="welcome-screen" id="welcomeScreen">
+          <h2>Add Cap to your site in 60 seconds</h2>
+          <p class="welcome-sub">Create a sitekey, paste two snippets, you're live.</p>
+
+          <button type="button" class="welcome-cta" id="welcomeCreateKey">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="16" height="16">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            Create your first key
+          </button>
+
+          <p class="welcome-steps">
+            <span>1. Name your key</span>
+            <span class="welcome-step-dot">Â·</span>
+            <span>2. Copy the snippets</span>
+            <span class="welcome-step-dot">Â·</span>
+            <span>3. Ship</span>
+          </p>
+
+          <a class="welcome-docs" href="https://trycap.dev/guide/" target="_blank" rel="noreferrer">Read the docs â†’</a>
+        </div>
+
+        <div class="key-detail" id="keyDetail" style="display: none"></div>
+      </div>
+    </div>
+
+    <!-- Tombol Chatbot CAPTCHA -->
+    <button
+      type="button"
+      class="ai-assistant-btn"
+      id="aiAssistantOpen"
+      style="position:fixed;right:24px;bottom:24px;width:auto;z-index:9998"
+      aria-controls="aiAssistantPanel"
+      aria-expanded="false"
+    >
+      <span class="ai-status"></span>
+      CAPTCHA Assistant
+    </button>
+
+    <!-- Panel Chatbot CAPTCHA -->
+    <section
+      class="ai-assistant-panel"
+      id="aiAssistantPanel"
+      role="dialog"
+      aria-label="Asisten Cap CAPTCHA"
+      aria-modal="false"
+      aria-hidden="true"
+    >
+      <header class="ai-assistant-header">
+        <h3>Asisten Cap CAPTCHA</h3>
+        <button type="button" class="ai-assistant-close" id="aiAssistantClose" aria-label="Tutup chatbot">Ã—</button>
+      </header>
+
+      <div class="ai-assistant-messages" id="aiAssistantMessages" aria-live="polite">
+        <div class="ai-assistant-message">
+          Halo! Saya asisten bantuan Cap CAPTCHA.
+
+          <br /><br />
+          Tanyakan tentang error 403, error 500, Site Key, Secret Key, token, challenge, atau Docker.
+        </div>
+      </div>
+
+      <form class="ai-assistant-form" id="aiAssistantForm">
+        <input
+          type="text"
+          id="aiAssistantInput"
+          placeholder="Tulis pertanyaan CAPTCHA..."
+          aria-label="Pertanyaan tentang CAPTCHA"
+          autocomplete="off"
+          required
+        />
+        <button type="submit">Kirim</button>
+      </form>
+    </section>
+
+    <!-- Script asli dashboard Cap -->
+    <script src="./public/assets/chart.js@4.5.0.min.js"></script>
+    <script src="./public/js/geo.js"></script>
+    <script src="./public/js/dashboard.js"></script>
+
+    <!-- Logika Chatbot CAPTCHA tanpa API eksternal -->
+    <script>
+      (() => {
+        const openButton = document.getElementById("aiAssistantOpen");
+        const closeButton = document.getElementById("aiAssistantClose");
+        const panel = document.getElementById("aiAssistantPanel");
+        const form = document.getElementById("aiAssistantForm");
+        const input = document.getElementById("aiAssistantInput");
+        const messages = document.getElementById("aiAssistantMessages");
+
+        function setPanelOpen(isOpen) {
+          panel.classList.toggle("is-open", isOpen);
+          panel.setAttribute("aria-hidden", String(!isOpen));
+          openButton.setAttribute("aria-expanded", String(isOpen));
+
+          if (isOpen) input.focus();
+          else openButton.focus();
+        }
+
+        openButton.addEventListener("click", () => setPanelOpen(true));
+        closeButton.addEventListener("click", () => setPanelOpen(false));
+
+        function getCaptchaAnswer(question) {
+          const q = question.toLowerCase();
+
+          if (/\b(halo|hai|hello|hi)\b/.test(q)) {
+            return "Halo! Saya bisa membantu menjelaskan masalah Cap CAPTCHA. Coba tanyakan tentang error 403, error 500, Site Key, Secret Key, token, challenge, atau Docker.";
+          }
+
+          if (q.includes("403") || q.includes("invalid site key") || q.includes("secret tidak cocok")) {
+            return "Error 403 dengan pesan Invalid site key or secret biasanya berarti Site Key atau Secret Key yang dikirim tidak cocok dengan konfigurasi Cap. Periksa CAP_SITE_KEY dan CAP_SECRET_KEY pada aplikasi, lalu pastikan keduanya sesuai dengan key yang dibuat di dashboard Cap. Jika mengubah .env, buat ulang container aplikasi agar konfigurasi terbaru digunakan. Jangan bagikan Secret Key.";
+          }
+
+          if (q.includes("500") || q.includes("internal server error")) {
+            return "Error 500 menandakan server gagal memproses permintaan. Periksa log dengan perintah: docker compose logs --tail=100 cap-server. Cari pesan error yang muncul sebelum error 500 untuk menemukan penyebabnya.";
+          }
+
+          if (q.includes("site key") || q.includes("secret key") || q.includes("cap_site_key") || q.includes("cap_secret_key")) {
+            return "Site Key digunakan oleh widget CAPTCHA pada halaman web. Secret Key digunakan di backend untuk memverifikasi token. Pastikan nilai keduanya sesuai dengan konfigurasi situs di Cap. Jangan menaruh Secret Key di HTML atau membagikannya kepada orang lain.";
+          }
+
+          if (q.includes("token") || q.includes("verifikasi") || q.includes("siteverify") || q.includes("verify")) {
+            return "Alur verifikasi: pengguna menyelesaikan challenge, widget menghasilkan token, lalu backend mengirim token ke endpoint siteverify bersama Secret Key. Jika gagal, periksa token, Site Key, Secret Key, endpoint, dan respons dari server Cap.";
+          }
+
+          if (q.includes("challenge") || q.includes("tantangan") || q.includes("you human")) {
+            return "Challenge adalah tantangan yang perlu diselesaikan pengguna. Jika tombol challenge tidak merespons atau tidak selesai, periksa koneksi browser ke server Cap, pemuatan skrip widget, konfigurasi Site Key, dan log cap-server.";
+          }
+
+          if (q.includes("docker") || q.includes("container") || q.includes("kontainer")) {
+            return "Untuk memeriksa container, jalankan: docker compose ps. Untuk log server Cap: docker compose logs --tail=100 cap-server. Untuk log aplikasi: docker compose logs --tail=100 my-app. Perintah ini membantu melihat apakah layanan berjalan dan apakah ada error.";
+          }
+
+          if (q.includes("statistik") || q.includes("aktivitas") || q.includes("jumlah captcha")) {
+            return "Saya belum membaca data statistik dashboard secara langsung. Saya dapat membantu menjelaskan cara memeriksa dashboard dan menganalisis pesan error yang kamu masukkan. Untuk statistik aktual, periksa data yang ditampilkan oleh dashboard Cap.";
+          }
+
+          if (q.includes("valkey") || q.includes("redis")) {
+            return "Cap menggunakan layanan penyimpanan Valkey/Redis pada konfigurasi proyekmu. Periksa status layanan dengan docker compose ps. Pastikan valkey berstatus healthy dan periksa log dengan docker compose logs --tail=100 valkey jika ada masalah.";
+          }
+
+          if (q.includes("bantuan") || q.includes("help") || q.includes("fitur")) {
+            return "Saya bisa membantu menjelaskan error 403 dan 500, konfigurasi Site Key dan Secret Key, proses token dan challenge, serta pemeriksaan Docker dan Valkey. Ketik pesan error atau pertanyaanmu secara lengkap.";
+          }
+
+          return "Saya belum memiliki jawaban khusus untuk pertanyaan itu. Coba tuliskan pesan error yang muncul atau tanyakan tentang error 403, error 500, Site Key, Secret Key, token, challenge, Docker, atau Valkey.";
+        }
+
+        function addMessage(text, type) {
+          const message = document.createElement("div");
+          message.className = "ai-assistant-message";
+          message.textContent = text;
+          messages.appendChild(message);
+          messages.scrollTop = messages.scrollHeight;
+        }
+
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+
+          const question = input.value.trim();
+          if (!question) return;
+
+          addMessage(question, "user");
+          addMessage(getCaptchaAnswer(question), "assistant");
+
+          input.value = "";
+          input.focus();
+        });
+      })();
+    </script>
+  </body>
+</html>

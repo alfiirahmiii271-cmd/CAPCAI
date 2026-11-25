@@ -1,0 +1,41 @@
+﻿# Environment dan API Key
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Backup
+*.backup
+*.bak
+*.old
+*-backup-*/
+*-backup-*
+
+# Log
+*.log
+logs/
+
+# Editor
+.vscode/
+.idea/
+
+# Operating System
+.DS_Store
+Thumbs.db
+
+# Folder backup proyek
+backup-*/
+
+# Backup tambahan
+*.backup-*
+*.backup-speed

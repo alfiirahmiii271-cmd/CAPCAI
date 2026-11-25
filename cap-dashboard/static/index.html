@@ -1,0 +1,984 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cap CAPTCHA Analytics Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --navy: #172b4d;
+            --navy-light: #243f68;
+            --blue: #3b82f6;
+            --bg: #f4f7fb;
+            --white: #ffffff;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e5eaf2;
+            --green: #16a34a;
+            --red: #dc2626;
+            --orange: #d97706;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        button, select, textarea {
+            font-family: inherit;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: var(--navy);
+            color: white;
+            padding: 26px 18px;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 8px 35px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #315c99;
+            display: grid;
+            place-items: center;
+            font-size: 23px;
+        }
+
+        .brand h2 {
+            font-size: 18px;
+            letter-spacing: .5px;
+        }
+
+        .brand p {
+            font-size: 11px;
+            color: #b9c9df;
+            margin-top: 4px;
+        }
+
+        .nav-label {
+            color: #91a5c1;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 0 12px;
+            margin-bottom: 13px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 13px 14px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 9px;
+            margin-bottom: 7px;
+            transition: .2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--navy-light);
+            color: white;
+        }
+
+        .nav-link.active {
+            border-left: 3px solid #60a5fa;
+        }
+
+        .nav-icon {
+            font-size: 18px;
+            width: 22px;
+            text-align: center;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding: 17px 12px;
+            border-top: 1px solid #344967;
+            font-size: 12px;
+            color: #aebed3;
+            line-height: 1.8;
+        }
+
+        .online-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        /* MAIN CONTENT */
+
+        .main {
+            margin-left: 250px;
+            padding: 30px 35px;
+            min-height: 100vh;
+            max-width: 1800px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .page-title h1 {
+            font-size: 25px;
+            font-weight: 750;
+            margin-bottom: 7px;
+        }
+
+        .page-title p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .admin {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .admin-avatar {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-weight: 700;
+        }
+
+        .admin-info strong {
+            display: block;
+            font-size: 13px;
+        }
+
+        .admin-info span {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        /* TOOLBAR */
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .toolbar-info {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .toolbar-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        select, button {
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 11px 15px;
+            background: white;
+            font-size: 13px;
+        }
+
+        select {
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        button {
+            cursor: pointer;
+            background: var(--blue);
+            color: white;
+            border: none;
+            font-weight: 600;
+            transition: .2s;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        #status {
+            color: var(--muted);
+            font-size: 12px;
+            margin: 12px 0 6px;
+        }
+
+        #error {
+            color: var(--red);
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        /* STATISTIC CARDS */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: white;
+            padding: 21px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, .025);
+        }
+
+        .stat-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .stat-top p {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .stat-icon {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            font-size: 20px;
+        }
+
+        .icon-blue {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .icon-green {
+            background: #f0fdf4;
+            color: #16a34a;
+        }
+
+        .icon-red {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .icon-orange {
+            background: #fff7ed;
+            color: #ea580c;
+        }
+
+        .stat-number {
+            font-size: 29px;
+            font-weight: 750;
+            letter-spacing: -.7px;
+        }
+
+        .stat-description {
+            color: #94a3b8;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+
+        /* SUCCESS RATE */
+
+        .success-card {
+            margin-bottom: 20px;
+        }
+
+        .success-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .success-content p {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .success-content h2 {
+            font-size: 29px;
+            color: var(--green);
+        }
+
+        .success-icon {
+            font-size: 30px;
+            background: #f0fdf4;
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        /* CHART */
+
+        .chart-panel {
+            background: white;
+            padding: 24px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            margin-bottom: 24px;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 23px;
+        }
+
+        .section-heading h2 {
+            font-size: 17px;
+        }
+
+        .section-heading p {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 5px;
+        }
+
+        .chart-container {
+            height: 320px;
+            position: relative;
+        }
+
+        /* CHATBOT */
+
+        .panel {
+            background: white;
+            padding: 24px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            margin-top: 24px;
+        }
+
+        .chat-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            gap: 10px;
+        }
+
+        .chat-heading h2 {
+            font-size: 18px;
+        }
+
+        .chat-heading p {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 5px;
+        }
+
+        .ai-status {
+            background: #f0fdf4;
+            color: #15803d;
+            padding: 7px 11px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        #msgs {
+            min-height: 170px;
+            max-height: 480px;
+            overflow-y: auto;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            scroll-behavior: smooth;
+        }
+
+        .msg {
+            padding: 14px 17px;
+            margin-bottom: 14px;
+            border-radius: 12px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+            white-space: pre-wrap;
+        }
+
+        .msg.user {
+            background: #e8f0ff;
+            margin-left: 15%;
+            border: 1px solid #d5e3ff;
+            border-bottom-right-radius: 4px;
+        }
+
+        .msg.assistant {
+            background: white;
+            margin-right: 10%;
+            border: 1px solid #e2e8f0;
+            border-bottom-left-radius: 4px;
+            padding: 18px 20px;
+        }
+
+        .msg.assistant h2,
+        .msg.assistant h3,
+        .msg.assistant h4 {
+            color: #1e293b;
+            font-weight: 700;
+            margin: 14px 0 9px;
+            line-height: 1.4;
+        }
+
+        .msg.assistant h2 {
+            font-size: 19px;
+        }
+
+        .msg.assistant h3 {
+            font-size: 17px;
+        }
+
+        .msg.assistant h4 {
+            font-size: 15px;
+        }
+
+        .msg.assistant p {
+            color: #475569;
+            font-size: 14px;
+            line-height: 1.8;
+            margin: 9px 0;
+        }
+
+        .msg.assistant ul,
+        .msg.assistant ol {
+            margin: 10px 0;
+            padding-left: 26px;
+        }
+
+        .msg.assistant li {
+            color: #475569;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 7px;
+            padding-left: 3px;
+        }
+
+        .msg.assistant strong {
+            color: #1d4ed8;
+            font-weight: 700;
+        }
+
+        .msg.assistant > div > *:first-child {
+            margin-top: 0;
+        }
+
+        .msg.assistant > div > *:last-child {
+            margin-bottom: 0;
+        }
+
+        #form {
+            display: flex;
+            gap: 10px;
+        }
+
+        #input {
+            flex: 1;
+            resize: vertical;
+            min-height: 50px;
+            max-height: 150px;
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            outline: none;
+            font-size: 14px;
+            background: #fff;
+        }
+
+        #input:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(59,130,246,.10);
+        }
+
+        #send {
+            min-width: 90px;
+        }
+
+        #send:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        #clear {
+            margin-top: 12px;
+            background: #64748b;
+        }
+
+        #clear:hover {
+            background: #475569;
+        }
+
+        
+/* DASHBOARD TWO-COLUMN LAYOUT */
+.dashboard-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 20px;
+    align-items: stretch;
+}
+
+.dashboard-main {
+    min-width: 0;
+}
+
+.dashboard-layout .panel {
+    margin-top: 20px;
+    position: sticky;
+    top: 20px;
+    height: calc(100vh - 40px);
+    min-height: 560px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.dashboard-layout #msgs {
+    flex: 1;
+    min-height: 120px;
+    max-height: none;
+}
+
+.dashboard-layout #form,
+.dashboard-layout #clear {
+    flex-shrink: 0;
+}
+
+@media (max-width: 1200px) {
+    .dashboard-layout {
+        grid-template-columns: minmax(0, 1fr) 320px;
+        gap: 15px;
+    }
+
+    .dashboard-layout .cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .dashboard-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .dashboard-layout .panel {
+        position: static;
+        height: 600px;
+        min-height: 500px;
+    }
+}
+
+@media (max-width: 700px) {
+    .dashboard-layout .panel {
+        height: 550px;
+    }
+}
+
+@media (max-width: 400px) {
+    .dashboard-layout .cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* FOOTER */
+
+        .footer {
+            text-align: center;
+            padding: 25px 0 10px;
+            color: #94a3b8;
+            font-size: 11px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1100px) {
+            .cards {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .main {
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 65px;
+                padding: 20px 8px;
+            }
+
+            .brand {
+                justify-content: center;
+                padding: 0 0 30px;
+            }
+
+            .brand-text,
+            .nav-label,
+            .nav-text,
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .nav-link {
+                justify-content: center;
+                padding: 13px 5px;
+            }
+
+            .nav-icon {
+                font-size: 20px;
+            }
+
+            .main {
+                margin-left: 65px;
+                padding: 20px 15px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+            }
+
+            .page-title h1 {
+                font-size: 20px;
+            }
+
+            .admin-info {
+                display: none;
+            }
+
+            .cards {
+                gap: 10px;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            .stat-number {
+                font-size: 23px;
+            }
+
+            .stat-top p {
+                font-size: 11px;
+            }
+
+            .chart-container {
+                height: 260px;
+            }
+
+            .panel,
+            .chart-panel {
+                padding: 16px;
+            }
+
+            .msg.user {
+                margin-left: 5%;
+            }
+
+            .msg.assistant {
+                margin-right: 5%;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .toolbar-actions {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .toolbar-actions select,
+            .toolbar-actions button {
+                width: 100%;
+            }
+
+            #form {
+                flex-direction: column;
+            }
+
+            #send {
+                min-height: 43px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">🛡️</div>
+            <div class="brand-text">
+                <h2>CAP ANALYTICS</h2>
+                <p>Security Monitoring</p>
+            </div>
+        </div>
+
+        <div class="nav-label">MENU UTAMA</div>
+
+        <a href="#dashboard" class="nav-link active">
+            <span class="nav-icon">▦</span>
+            <span class="nav-text">Dashboard</span>
+        </a>
+
+        <a href="#statistics" class="nav-link">
+            <span class="nav-icon">▥</span>
+            <span class="nav-text">Statistik CAPTCHA</span>
+        </a>
+
+        <a href="#assistant" class="nav-link">
+            <span class="nav-icon">✧</span>
+            <span class="nav-text">AI Assistant</span>
+        </a>
+
+        <div class="sidebar-bottom">
+            <div><span class="online-dot"></span> Sistem aktif</div>
+            <div>Cap CAPTCHA Analytics</div>
+            <div>Monitoring Dashboard</div>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main" id="dashboard">
+
+        <!-- HEADER -->
+        <header class="topbar">
+
+            <div class="page-title">
+                <h1>Dashboard Overview</h1>
+                <p>Selamat datang di pusat monitoring aktivitas CAPTCHA.</p>
+            </div>
+
+            <div class="admin">
+                <div class="admin-avatar">A</div>
+                <div class="admin-info">
+                    <strong>Administrator</strong>
+                    <span>System Monitoring</span>
+                </div>
+            </div>
+
+        </header>
+
+
+        <!-- FILTER -->
+        <div class="toolbar">
+
+            <div class="toolbar-info">
+                Ringkasan aktivitas keamanan CAPTCHA
+            </div>
+
+            <div class="toolbar-actions">
+
+                <select id="period">
+                    <option value="today">Hari ini</option>
+                    <option value="last7days">7 hari terakhir</option>
+                    <option value="last28days">28 hari terakhir</option>
+                    <option value="last91days">91 hari terakhir</option>
+                    <option value="alltime">Semua waktu</option>
+                </select>
+
+                <button id="refresh">↻ Perbarui Data</button>
+
+            </div>
+
+        </div>
+
+
+        <p id="status">Memuat statistik...</p>
+        <p id="error"></p>
+
+
+        <div class="dashboard-layout">
+<div class="dashboard-main">
+
+<!-- STATISTIC CARDS -->
+        <section class="cards">
+
+            <div class="card">
+                <div class="stat-top">
+                    <p>Total Challenges</p>
+                    <div class="stat-icon icon-blue">▦</div>
+                </div>
+                <h2 class="stat-number" id="challenges">0</h2>
+                <p class="stat-description">Total tantangan CAPTCHA</p>
+            </div>
+
+            <div class="card">
+                <div class="stat-top">
+                    <p>Verified</p>
+                    <div class="stat-icon icon-green">✓</div>
+                </div>
+                <h2 class="stat-number" id="verified">0</h2>
+                <p class="stat-description">Verifikasi berhasil</p>
+            </div>
+
+            <div class="card">
+                <div class="stat-top">
+                    <p>Failed</p>
+                    <div class="stat-icon icon-red">✕</div>
+                </div>
+                <h2 class="stat-number" id="failed">0</h2>
+                <p class="stat-description">Verifikasi gagal</p>
+            </div>
+
+            <div class="card">
+                <div class="stat-top">
+                    <p>Rate Limited</p>
+                    <div class="stat-icon icon-orange">⚠</div>
+                </div>
+                <h2 class="stat-number" id="rateLimited">0</h2>
+                <p class="stat-description">Permintaan dibatasi</p>
+            </div>
+
+        </section>
+
+
+        <!-- SUCCESS RATE -->
+        <section class="card success-card">
+
+            <div class="success-content">
+
+                <div>
+                    <p>Success Rate</p>
+                    <h2 id="successRate">0%</h2>
+                    <p class="stat-description">
+                        Persentase keberhasilan verifikasi CAPTCHA
+                    </p>
+                </div>
+
+                <div class="success-icon">📈</div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CHART -->
+        <section class="chart-panel" id="statistics">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Grafik Aktivitas CAPTCHA</h2>
+                    <p>Perbandingan verifikasi berhasil dan gagal</p>
+                </div>
+
+                <span class="ai-status">● Data Statistik</span>
+
+            </div>
+
+            <div class="chart-container">
+                <canvas id="captchaChart"></canvas>
+            </div>
+
+        </section>
+
+
+        </div>
+
+<!-- AI CHATBOT -->
+        <section class="panel" id="assistant">
+
+            <div class="chat-heading">
+
+                <div>
+                    <h2>✧ AI CAPTCHA Assistant</h2>
+                    <p>Asisten AI untuk analisis statistik dan aktivitas CAPTCHA.</p>
+                </div>
+
+                <span class="ai-status">● AI Assistant</span>
+
+            </div>
+
+            <div id="msgs" aria-live="polite"></div>
+
+            <form id="form">
+
+                <textarea
+                    id="input"
+                    rows="2"
+                    maxlength="2000"
+                    placeholder="Tanyakan sesuatu tentang statistik CAPTCHA..."
+                    aria-label="Tulis pertanyaan untuk AI"
+                ></textarea>
+
+                <button id="send" type="submit">
+                    Kirim ➤
+                </button>
+
+            </form>
+
+            <button id="clear" type="button">
+                ↻ Chat Baru
+            </button>
+
+        </section>
+
+
+        </div>
+
+<!-- FOOTER -->
+        <footer class="footer">
+            Cap CAPTCHA Analytics Dashboard
+            <br>
+            Sistem Monitoring Aktivitas Keamanan CAPTCHA
+        </footer>
+
+    </main>
+
+
+    <!-- JAVASCRIPT -->
+    <script src="/chat.js"></script>
+
+</body>
+</html>

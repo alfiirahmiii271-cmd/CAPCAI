@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Form Login Percobaan - Cap CAPTCHA</title>
+
+  <!-- Font -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- Ikon -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  >
+
+  <!-- Cap CAPTCHA Widget -->
+  <script src="https://cdn.jsdelivr.net/npm/cap-widget"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #e4e9f2);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 480px;
+      padding: 36px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .header-icon {
+      color: #dc2626;
+      font-size: 36px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      color: #0f172a;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #64748b;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #1e293b;
+    }
+
+    input[type="email"] {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    input[type="email"]:focus {
+      outline: 2px solid #fecaca;
+      border-color: #dc2626;
+    }
+
+    .captcha-container {
+      margin: 24px 0;
+      min-height: 70px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 13px;
+      background: #dc2626;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn-submit:hover {
+      background: #b91c1c;
+    }
+
+    .btn-submit:focus-visible {
+      outline: 3px solid #fca5a5;
+      outline-offset: 3px;
+    }
+
+    .note {
+      margin-top: 14px;
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 24px;
+      }
+
+      h1 {
+        font-size: 21px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="card">
+    <div class="header-icon">
+      <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+    </div>
+
+    <h1>Form Login Percobaan</h1>
+
+    <p class="subtitle">
+      Masukkan alamat email dan selesaikan verifikasi CAPTCHA
+      untuk melanjutkan.
+    </p>
+
+    <form action="/verify" method="POST">
+      <div class="form-group">
+        <label for="email">Alamat Email</label>
+
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="contoh@email.com"
+          autocomplete="email"
+          required
+        >
+      </div>
+
+      <div class="captcha-container">
+        <cap-widget
+          id="cap"
+          data-cap-api-endpoint="__CAP_API_ENDPOINT__">
+        </cap-widget>
+      </div>
+
+      <button type="submit" class="btn-submit">
+        <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+        Kirim Form
+      </button>
+
+      <p class="note">
+        Halaman ini digunakan untuk pengujian CAPTCHA lokal.
+      </p>
+    </form>
+  </main>
+</body>
+</html>

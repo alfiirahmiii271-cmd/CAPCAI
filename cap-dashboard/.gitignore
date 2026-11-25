@@ -1,0 +1,39 @@
+﻿# Environment dan API Key
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Cache dan testing
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# File backup
+*.backup
+*.bak
+*.old
+*-backup-*/
+*-backup-*
+
+# Log
+*.log
+logs/
+
+# Editor
+.vscode/
+.idea/
+
+# Sistem operasi
+.DS_Store
+Thumbs.db
